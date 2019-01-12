@@ -1,17 +1,20 @@
 Name:           libvdpau
 Version:        1.1.1
-Release:        2%{?dist}
+Release:        11%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
-URL:            http://freedesktop.org/wiki/Software/VDPAU
-Source0:        http://cgit.freedesktop.org/vdpau/libvdpau/snapshot/%{name}-%{version}.tar.bz2
+URL:            https://freedesktop.org/wiki/Software/VDPAU/
+Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/uploads/5635163f040f2eea59b66d0181cf664b/libvdpau-%{version}.tar.bz2
 Patch0:         0001-mesa_dri2-Add-missing-include-of-config.h-to-define-.patch
 Patch1:         0002-util.h-Make-getenv_wrapper-static-inline.patch
 Patch2:         0003-Fix-doc-error-on-displayable-surface-types.patch
+Patch3:         0004-Add-new-frame-and-field-mode-chroma-types.-Add-VdpDe.patch
+Patch4:         0005-Fix-typos-from-commit-53eeb07f68d483fee86ad872884aee.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  doxygen
+BuildRequires:  gcc-c++
 BuildRequires:  graphviz
 BuildRequires:  libtool
 BuildRequires:  libX11-devel
@@ -28,6 +31,16 @@ VDPAU is the Video Decode and Presentation API for UNIX. It provides an
 interface to video decode acceleration and presentation hardware present in
 modern GPUs.
 
+%package        trace
+Summary:        Trace library for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+%if 0%{?fedora} > 26 || 0%{?rhel} > 7
+Supplements:    %{name}-debuginfo%{?_isa}
+%endif
+
+%description    trace
+The %{name}-trace package contains trace library for %{name}.
+
 %package        docs
 Summary:        Documentation for %{name}
 BuildArch:      noarch
@@ -40,6 +53,8 @@ The %{name}-docs package contains documentation for %{name}.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+#Multilibs trace
+Requires:       %{name}-trace%{?_isa} = %{version}-%{release}
 Requires:       libX11-devel
 Requires:       pkgconfig
 
@@ -52,29 +67,34 @@ applications that use %{name}.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
+%patch4 -p1
 
 %build
 autoreconf -vif
 %configure --disable-static
-make %{?_smp_mflags}
+%make_build
 
 %install
-make install DESTDIR=%{buildroot} INSTALL="install -p"
+%make_install
 find %{buildroot} -name '*.la' -delete
 # Let %%doc macro create the correct location in the rpm file, creates a
 # versioned docdir in <= f19 and an unversioned docdir in >= f20.
 rm -fr %{buildroot}%{_docdir}
 mv doc/html-out html
 
-%post -p /sbin/ldconfig
 
-%postun -p /sbin/ldconfig
+%ldconfig_scriptlets
+
 
 %files
-%doc AUTHORS COPYING
+%doc AUTHORS
+%license COPYING
 %config(noreplace) %{_sysconfdir}/vdpau_wrapper.cfg
 %{_libdir}/*.so.*
 %dir %{_libdir}/vdpau
+
+%files trace
 %{_libdir}/vdpau/%{name}_trace.so*
 
 %files docs
@@ -85,7 +105,36 @@ mv doc/html-out html
 %{_libdir}/%{name}.so
 %{_libdir}/pkgconfig/vdpau.pc
 
+
 %changelog
+* Tue Jan 08 2019 Nicolas Chauvet <kwizart@gmail.com> - 1.1.1-11
+- Apply patches from upstream
+
+* Tue Jul 17 2018 Nicolas Chauvet <kwizart@gmail.com> - 1.1.1-10
+- Add missng cc
+
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Tue Feb 20 2018 Nicolas Chauvet <kwizart@gmail.com> - 1.1.1-8
+- Move libvdpau_trace to trace sub-package
+- Spec file clean-up
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Thu Aug 03 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Fri Feb 10 2017 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Fri Oct 02 2015 Nicolas Chauvet <kwizart@gmail.com> - 1.1.1-2
 - Backport current patches
 - Switch to new upstream git repository on freedesktop.org
