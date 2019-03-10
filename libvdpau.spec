@@ -1,15 +1,12 @@
+%global gitlab_hash 14b620084c027d546fa0b3f083b800c6
+
 Name:           libvdpau
-Version:        1.1.1
-Release:        11%{?dist}
+Version:        1.2
+Release:        1%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
 URL:            https://freedesktop.org/wiki/Software/VDPAU/
-Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/uploads/5635163f040f2eea59b66d0181cf664b/libvdpau-%{version}.tar.bz2
-Patch0:         0001-mesa_dri2-Add-missing-include-of-config.h-to-define-.patch
-Patch1:         0002-util.h-Make-getenv_wrapper-static-inline.patch
-Patch2:         0003-Fix-doc-error-on-displayable-surface-types.patch
-Patch3:         0004-Add-new-frame-and-field-mode-chroma-types.-Add-VdpDe.patch
-Patch4:         0005-Fix-typos-from-commit-53eeb07f68d483fee86ad872884aee.patch
+Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/uploads/%{gitlab_hash}/libvdpau-%{version}.tar.bz2
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -64,11 +61,7 @@ applications that use %{name}.
 
 %prep
 %setup -q
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
+
 
 %build
 autoreconf -vif
@@ -107,6 +100,12 @@ mv doc/html-out html
 
 
 %changelog
+* Fri Mar 01 2019 Nicolas Chauvet <kwizart@gmail.com> - 1.2-1
+- Update to 1.2
+
+* Fri Feb 01 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Tue Jan 08 2019 Nicolas Chauvet <kwizart@gmail.com> - 1.1.1-11
 - Apply patches from upstream
 
