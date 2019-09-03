@@ -1,21 +1,18 @@
-%global gitlab_hash 14b620084c027d546fa0b3f083b800c6
-
 Name:           libvdpau
-Version:        1.2
+Version:        1.3
 Release:        1%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
 URL:            https://freedesktop.org/wiki/Software/VDPAU/
-Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/uploads/%{gitlab_hash}/libvdpau-%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/%{version}/libvdpau-%{version}.tar.bz2
 
-BuildRequires:  autoconf
-BuildRequires:  automake
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  graphviz
 BuildRequires:  libtool
 BuildRequires:  libX11-devel
 BuildRequires:  libXext-devel
+BuildRequires:  meson
 %if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
 BuildRequires:  tex(latex)
 %else
@@ -52,7 +49,7 @@ Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 #Multilibs trace
 Requires:       %{name}-trace%{?_isa} = %{version}-%{release}
-Requires:       libX11-devel
+Requires:       libX11-devel%{?_isa}
 Requires:       pkgconfig
 
 %description    devel
@@ -60,21 +57,20 @@ The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
 %prep
-%setup -q
+%autosetup -p1
 
 
 %build
-autoreconf -vif
-%configure --disable-static
-%make_build
+%meson
+%meson_build
 
 %install
-%make_install
+%meson_install
 find %{buildroot} -name '*.la' -delete
 # Let %%doc macro create the correct location in the rpm file, creates a
 # versioned docdir in <= f19 and an unversioned docdir in >= f20.
 rm -fr %{buildroot}%{_docdir}
-mv doc/html-out html
+mv %{_vpath_builddir}/doc/html html
 
 
 %ldconfig_scriptlets
@@ -85,7 +81,7 @@ mv doc/html-out html
 %license COPYING
 %config(noreplace) %{_sysconfdir}/vdpau_wrapper.cfg
 %{_libdir}/*.so.*
-%dir %{_libdir}/vdpau
+%dir %{_libdir}/vdpau/
 
 %files trace
 %{_libdir}/vdpau/%{name}_trace.so*
@@ -100,6 +96,17 @@ mv doc/html-out html
 
 
 %changelog
+* Thu Aug 29 2019 Leigh Scott <leigh123linux@googlemail.com> - 1.3-1
+- Update to 1.3
+- Switch to meson build
+- Use an easier URL for source
+
+* Wed Aug 21 2019 Nicolas Chauvet <kwizart@gmail.com> - 1.2-3
+- Fetch VP9 support
+
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Fri Mar 01 2019 Nicolas Chauvet <kwizart@gmail.com> - 1.2-1
 - Update to 1.2
 
