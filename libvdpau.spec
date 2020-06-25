@@ -1,10 +1,10 @@
 Name:           libvdpau
-Version:        1.3
-Release:        1%{?dist}
+Version:        1.4
+Release:        2%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
 URL:            https://freedesktop.org/wiki/Software/VDPAU/
-Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/%{version}/libvdpau-%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/libvdpau-%{version}/libvdpau-%{version}.tar.bz2
 
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
@@ -57,7 +57,7 @@ The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n libvdpau-libvdpau-1.4-c3d1a9dbafdfe6144ff474d0d523dc01b068750f
 
 
 %build
@@ -96,6 +96,15 @@ mv %{_vpath_builddir}/doc/html html
 
 
 %changelog
+* Wed Jun 24 2020 Nicolas Chauvet <kwizart@gmail.com> - 1.4-2
+- Rebuilt
+
+* Fri Apr 10 2020 Nicolas Chauvet <kwizart@gmail.com> - 1.4-1
+- Update to 1.4
+
+* Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
 * Thu Aug 29 2019 Leigh Scott <leigh123linux@googlemail.com> - 1.3-1
 - Update to 1.3
 - Switch to meson build
