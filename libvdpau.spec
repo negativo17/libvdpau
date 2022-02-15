@@ -50,7 +50,7 @@ Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 # Multilibs trace
 Requires:       %{name}-trace%{?_isa} = %{version}-%{release}
-Requires:       pkgconfig(X11)
+Requires:       pkgconfig(x11)
 Requires:       pkgconfig
 
 %description    devel
