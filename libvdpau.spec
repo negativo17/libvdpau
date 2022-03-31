@@ -1,17 +1,11 @@
 Name:           libvdpau
-Version:        1.4
+Version:        1.5
 Release:        10%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
 URL:            https://www.freedesktop.org/wiki/Software/VDPAU/
 
 Source0:        https://gitlab.freedesktop.org/vdpau/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
-Patch0:         0001-Update-AUTHORS.patch
-Patch1:         0002-Add-tracing-for-VP9-picture-info.patch
-Patch2:         0003-Add-tracing-for-HEVCRangeExt-picture-info.patch
-Patch3:         0004-CI-Switch-from-archlinux-base-latest-to-archlinux-la.patch
-Patch4:         0005-Addition-of-comma-and-removing-the-extra-braces.patch
-Patch5:         0006-Add-AV1-decode-support-in-VDPAU-API.patch
 
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
@@ -93,6 +87,9 @@ rm -fr %{buildroot}%{_docdir}
 
 
 %changelog
+* Thu Mar 31 2022 Simone Caronni <negativo17@gmail.com> - 1.5-10
+- Update to 1.5.
+
 * Sun Feb 13 2022 Simone Caronni <negativo17@gmail.com> - 1.4-10
 - Update SPEC file.
 - Add upstream patches, enables AV1 decoding as shipped in the upstream Nvidia
