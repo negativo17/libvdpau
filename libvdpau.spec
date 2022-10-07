@@ -1,11 +1,12 @@
 Name:           libvdpau
 Version:        1.5
-Release:        10%{?dist}
+Release:        11%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
 URL:            https://www.freedesktop.org/wiki/Software/VDPAU/
 
 Source0:        https://gitlab.freedesktop.org/vdpau/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+Patch0:         https://gitlab.freedesktop.org/vdpau/libvdpau/-/commit/2afa3f989af24a922692ac719fae23c321776cdb.diff
 
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
@@ -87,6 +88,9 @@ rm -fr %{buildroot}%{_docdir}
 
 
 %changelog
+* Fri Oct 07 2022 Simone Caronni <negativo17@gmail.com> - 1.5-11
+- Add upstream AV1 tracing patch.
+
 * Thu Mar 31 2022 Simone Caronni <negativo17@gmail.com> - 1.5-10
 - Update to 1.5.
 
